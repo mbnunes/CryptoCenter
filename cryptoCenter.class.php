@@ -1,6 +1,6 @@
 <?php
 
-class Projeto {
+class CryptoCenter {
 	private $exchanges = [];
 
 	public function __construct() {
@@ -22,11 +22,11 @@ class Projeto {
 			$this->exchanges[strtolower($exchange)] = new $exchange();
 
 			if (!property_exists($this->exchanges[strtolower($exchange)], "public_key")) {
-				throw new ProjetoException("Exchange {$exchange} has no private property \$public_key", 400, null, ['exchange' => $exchange]);
+				throw new CryptoCenterException("Exchange {$exchange} has no private property \$public_key", 400, null, ['exchange' => $exchange]);
 			}
 
 			if (!property_exists($this->exchanges[strtolower($exchange)], "key_secret")) {
-				throw new ProjetoException("Exchange {$exchange} has no private property \$key_secret", 400, null, ['exchange' => $exchange]);
+				throw new CryptoCenterException("Exchange {$exchange} has no private property \$key_secret", 400, null, ['exchange' => $exchange]);
 			}
 		}
 	}

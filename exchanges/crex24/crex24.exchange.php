@@ -26,7 +26,7 @@ class Crex24 implements Exchange {
         return strtoupper(implode("_", array_reverse(explode('/', $pair))));
     }
 
-    private function apiToProjeto($pair) {
+    private function apiToCryptoCenter($pair) {
         return strtoupper(implode("/", array_reverse(explode('_', $pair))));
     }
 
@@ -57,7 +57,7 @@ class Crex24 implements Exchange {
         if (empty($this->caches['getMarkets'])) {
             $ret = $this->api->getTickers();
             foreach ($ret->Tickers as $ticker => $market) {
-                $tmp[] = $this->apiToProjeto($market->PairName);
+                $tmp[] = $this->apiToCryptoCenter($market->PairName);
             }
             $this->caches['getMarkets'] = $tmp;
         } else {
@@ -170,7 +170,7 @@ class Crex24 implements Exchange {
             }
 
             $ret->id = $orderId;
-            $ret->pair = $this->apiToProjeto($tmp->CurrentOrder->PairName);
+            $ret->pair = $this->apiToCryptoCenter($tmp->CurrentOrder->PairName);
             $ret->type = ($tmp->CurrentOrder->IsSell ? "SELL" : "BUY");
             $ret->amount = $tmp->CurrentOrder->CoinCount;
             $ret->filled = $filled;

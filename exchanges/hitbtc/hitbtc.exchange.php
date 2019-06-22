@@ -223,7 +223,7 @@ class Hitbtc implements Exchange {
 
     public function placeOrder(String $pair, String $type, float $amount, float $price): placeOrderReturn {
         if (!in_array(strtoupper($type), ['BUY', 'SELL'])) {
-            throw new ProjetoException("Wrong order type", 102, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'pair' => $pair, 'type' => $type, 'amount' => $amount, "price" => $price]);
+            throw new CryptoCenterException("Wrong order type", 102, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'pair' => $pair, 'type' => $type, 'amount' => $amount, "price" => $price]);
         }
 
         $ticker = str_replace("/", '', $pair);

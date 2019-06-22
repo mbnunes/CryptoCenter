@@ -31,7 +31,7 @@ class Braziliex implements Exchange {
         return strtolower(implode("_", explode('/', $pair)));
     }
 
-    private function apiToProjeto($pair) {
+    private function apiToCryptoCenter($pair) {
         return strtoupper(implode("/", explode('_', $pair)));
     }
 
@@ -43,7 +43,7 @@ class Braziliex implements Exchange {
             $return = new getMarketsReturn();
             foreach ($this->api->getTickers() as $ticker => $market) {
                 if ($market['active']) {
-                    $tmp[] = $this->apiToProjeto($ticker);
+                    $tmp[] = $this->apiToCryptoCenter($ticker);
                 }
             }
             $return->markets = $tmp;

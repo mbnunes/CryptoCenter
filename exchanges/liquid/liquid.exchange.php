@@ -59,7 +59,7 @@ class Liquid implements Exchange {
         }
 
         if (!isset($this->caches['markets'][$pair])) {
-            throw new ProjetoException("Market {$pair} not found", 100, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'pair' => $pair]);
+            throw new CryptoCenterException("Market {$pair} not found", 100, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'pair' => $pair]);
         }
 
         $market = $this->caches['markets'][$pair];
@@ -133,7 +133,7 @@ class Liquid implements Exchange {
 
     public function placeOrder(String $pair, String $type, float $amount, float $price): placeOrderReturn {
         if (!in_array(strtoupper($type), ['BUY', 'SELL'])) {
-            throw new ProjetoException("Wrong order type", 102, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'pair' => $pair, 'type' => $type, 'amount' => $amount, "price" => $price]);
+            throw new CryptoCenterException("Wrong order type", 102, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'pair' => $pair, 'type' => $type, 'amount' => $amount, "price" => $price]);
         }
 
         $typeFinal = (strtoupper($type) == "BUY" ? 'buy' : "sell");
@@ -294,7 +294,7 @@ class Liquid implements Exchange {
             $execResult = curl_exec($ch);
             $result = json_decode($execResult);
         } catch (Exeption $e) {
-            throw new ProjetoException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'path' => $path]);
+            throw new CryptoCenterException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'path' => $path]);
         }
 
         return $result;
@@ -341,10 +341,10 @@ class Liquid implements Exchange {
             $result = json_decode($execResult);
 
             if (!empty($result->error) || (!empty($result->message) && in_array($result->message, ['Order not found'])) || strstr($execResult, "<html")) {
-                throw new ProjetoException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'path' => $path, 'data' => $data, 'type' => $type, 'response' => $result]);
+                throw new CryptoCenterException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'path' => $path, 'data' => $data, 'type' => $type, 'response' => $result]);
             }
         } catch (Exeption $e) {
-            throw new ProjetoException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'path' => $path]);
+            throw new CryptoCenterException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'path' => $path]);
         }
 
         return $result;

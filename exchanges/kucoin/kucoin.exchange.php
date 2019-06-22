@@ -187,7 +187,7 @@ class Kucoin implements Exchange {
         }
 
         if (!isset($this->caches['markets'][$pair])) {
-            throw new ProjetoException("Market {$pair} not found", 100, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'pair' => $pair]);
+            throw new CryptoCenterException("Market {$pair} not found", 100, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'pair' => $pair]);
         }
 
         $market = $this->caches['markets'][$pair];
@@ -217,7 +217,7 @@ class Kucoin implements Exchange {
 
     public function placeOrder(String $pair, String $type, float $amount, float $price): placeOrderReturn {
         if (!in_array(strtoupper($type), ['BUY', 'SELL'])) {
-            throw new ProjetoException("Wrong order type", 102, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'pair' => $pair, 'type' => $type, 'amount' => $amount, "price" => $price]);
+            throw new CryptoCenterException("Wrong order type", 102, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'pair' => $pair, 'type' => $type, 'amount' => $amount, "price" => $price]);
         }
 
         $typeFinal = (strtoupper($type) == "BUY" ? 'buy' : "sell");

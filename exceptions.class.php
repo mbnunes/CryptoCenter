@@ -1,6 +1,6 @@
 <?php
 
-class ProjetoException extends Exception {
+class CryptoCenterException extends Exception {
 	public $extraData = [];
 
 	public function __construct($message, $code = 0, Exception $previous = null, $extraData = []) {

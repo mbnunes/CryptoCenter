@@ -55,7 +55,7 @@ class Tradesatoshi implements Exchange {
             $markets = $this->api->GetMarketSummaries();
 
             if (!$markets->success) {
-                throw new ProjetoException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'message' => $markets->message]);
+                throw new CryptoCenterException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'message' => $markets->message]);
             }
         }
 
@@ -87,7 +87,7 @@ class Tradesatoshi implements Exchange {
         }
 
         if (!isset($this->caches['markets'][$pair])) {
-            throw new ProjetoException("Market {$pair} not found", 100, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'pair' => $pair]);
+            throw new CryptoCenterException("Market {$pair} not found", 100, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'pair' => $pair]);
         }
 
         $market = $this->caches['markets'][$pair];
@@ -113,11 +113,11 @@ class Tradesatoshi implements Exchange {
         }
 
         if (!$balance->success) {
-            throw new ProjetoException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'message' => $balance->message]);
+            throw new CryptoCenterException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'message' => $balance->message]);
         }
 
         if (empty($balance->result)) {
-            throw new ProjetoException("API Error", 101, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'message' => "Currency not found"]);
+            throw new CryptoCenterException("API Error", 101, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'message' => "Currency not found"]);
         }
 
         $return->avaible = $balance->result->available;
@@ -132,11 +132,11 @@ class Tradesatoshi implements Exchange {
         $orderBook = $this->api->GetOrderBook($market->ticker, 'both', $max_results);
 
         if (!$orderBook->success) {
-            throw new ProjetoException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'message' => $balance->message]);
+            throw new CryptoCenterException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'message' => $balance->message]);
         }
 
         if (empty($orderBook->result)) {
-            throw new ProjetoException("API Error", 101, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'message' => "Pair orderbook not found"]);
+            throw new CryptoCenterException("API Error", 101, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'message' => "Pair orderbook not found"]);
         }
 
         $return = new getOrderBookReturn();
@@ -173,7 +173,7 @@ class Tradesatoshi implements Exchange {
 
     public function placeOrder(String $pair, String $type, float $amount, float $price): placeOrderReturn {
         if (!in_array(strtoupper($type), ['BUY', 'SELL'])) {
-            throw new ProjetoException("Wrong order type", 102, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'pair' => $pair, 'type' => $type, 'amount' => $amount, "price" => $price]);
+            throw new CryptoCenterException("Wrong order type", 102, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'pair' => $pair, 'type' => $type, 'amount' => $amount, "price" => $price]);
         }
 
         $typeFinal = (strtoupper($type) == "BUY" ? 'Buy' : "Sell");
@@ -183,7 +183,7 @@ class Tradesatoshi implements Exchange {
         $order = $this->api->SubmitOrder($market->ticker, $typeFinal, $amount, $price);
 
         if (!$order->success || empty($order->result)) {
-            throw new ProjetoException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'pair' => $pair, 'type' => $type, 'amount' => $amount, "price" => $price, 'response' => $order]);
+            throw new CryptoCenterException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'pair' => $pair, 'type' => $type, 'amount' => $amount, "price" => $price, 'response' => $order]);
         }
 
         $return = new placeOrderReturn();
@@ -200,7 +200,7 @@ class Tradesatoshi implements Exchange {
         $cancel = $this->api->CancelOrder("Single", $orderId);
 
         if (!$cancel->success || empty($cancel->result)) {
-            throw new ProjetoException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'response' => $cancel]);
+            throw new CryptoCenterException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'response' => $cancel]);
         }
 
         $return = new cancelOrderReturn();
@@ -214,7 +214,7 @@ class Tradesatoshi implements Exchange {
         $info = $this->api->GetOrder($orderId);
 
         if (!$info->success || empty($info->result)) {
-            throw new ProjetoException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'response' => $info]);
+            throw new CryptoCenterException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'response' => $info]);
         }
 
         $status = [
@@ -259,7 +259,7 @@ class Tradesatoshi implements Exchange {
             $return->min = $this->caches['fees'][$currency]['min'];
             $return->fee = $this->caches['fees'][$currency]['fee'];
         } else {
-            throw new ProjetoException("Coin {$currency} not avaible to trade", 300, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'currency' => $currency]);
+            throw new CryptoCenterException("Coin {$currency} not avaible to trade", 300, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'currency' => $currency]);
         }
 
         return $return;
@@ -270,11 +270,11 @@ class Tradesatoshi implements Exchange {
         $fee = $this->getWithdrawFee($currency);
 
         if (!$withdraw->success) {
-            throw new ProjetoException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'message' => $withdraw->message]);
+            throw new CryptoCenterException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'message' => $withdraw->message]);
         }
 
         if (empty($withdraw->result)) {
-            throw new ProjetoException("API Error", 101, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'message' => "Withdraw error"]);
+            throw new CryptoCenterException("API Error", 101, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'message' => "Withdraw error"]);
         }
 
         $return = new doWithdrawReturn();
@@ -292,11 +292,11 @@ class Tradesatoshi implements Exchange {
         $wallet = $this->api->GetBalance($currency);
 
         if (!$wallet->success) {
-            throw new ProjetoException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'message' => $wallet->message]);
+            throw new CryptoCenterException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'message' => $wallet->message]);
         }
 
         if (empty($wallet->result)) {
-            throw new ProjetoException("API Error", 101, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'message' => "Currency not found"]);
+            throw new CryptoCenterException("API Error", 101, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'message' => "Currency not found"]);
         }
 
         $return = new getDepositAddressReturn();

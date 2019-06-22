@@ -46,7 +46,7 @@ class Coinbene implements Exchange {
             $markets = $this->api->markets();
 
             if ($markets->status != "ok") {
-                throw new ProjetoException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__]);
+                throw new CryptoCenterException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__]);
             }
         }
 
@@ -76,7 +76,7 @@ class Coinbene implements Exchange {
         }
 
         if (!isset($this->caches['markets'][$pair])) {
-            throw new ProjetoException("Market {$pair} not found", 100, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'pair' => $pair]);
+            throw new CryptoCenterException("Market {$pair} not found", 100, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'pair' => $pair]);
         }
 
         $market = $this->caches['markets'][$pair];
@@ -98,7 +98,7 @@ class Coinbene implements Exchange {
             $balances = $this->api->balance();
 
             if ($balances->status != "ok") {
-                throw new ProjetoException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__]);
+                throw new CryptoCenterException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__]);
             }
         }
 
@@ -117,7 +117,7 @@ class Coinbene implements Exchange {
         }
 
         if (!$found) {
-            throw new ProjetoException("Coin balance not found", 101, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'currency' => $currency]);
+            throw new CryptoCenterException("Coin balance not found", 101, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'currency' => $currency]);
         }
 
         return $return;
@@ -128,7 +128,7 @@ class Coinbene implements Exchange {
         $orderBook = $this->api->orderbook($market->ticker, $max_results);
 
         if ($orderBook->status != "ok") {
-            throw new ProjetoException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'currency' => $currency]);
+            throw new CryptoCenterException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'currency' => $currency]);
         }
 
         $return = new getOrderBookReturn();
@@ -165,7 +165,7 @@ class Coinbene implements Exchange {
 
     public function placeOrder(String $pair, String $type, float $amount, float $price): placeOrderReturn {
         if (!in_array(strtoupper($type), ['BUY', 'SELL'])) {
-            throw new ProjetoException("Wrong order type", 102, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'pair' => $pair, 'type' => $type, 'amount' => $amount, "price" => $price]);
+            throw new CryptoCenterException("Wrong order type", 102, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'pair' => $pair, 'type' => $type, 'amount' => $amount, "price" => $price]);
         }
 
         $typeFinal = (strtoupper($type) == "BUY" ? 'buy-limit' : "sell-limit");
@@ -175,7 +175,7 @@ class Coinbene implements Exchange {
         $order = $this->api->orders($market->ticker, $typeFinal, number_format($price, 8, ".", ""), $amount);
 
         if ($order->status != "ok") {
-            throw new ProjetoException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'pair' => $pair, 'type' => $type, 'amount' => $amount, "price" => $price, 'response' => $order]);
+            throw new CryptoCenterException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'pair' => $pair, 'type' => $type, 'amount' => $amount, "price" => $price, 'response' => $order]);
         }
 
         $return = new placeOrderReturn();
@@ -192,7 +192,7 @@ class Coinbene implements Exchange {
         $cancel = $this->api->cancel($orderId);
 
         if ($cancel->status != "ok") {
-            throw new ProjetoException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'orderId' => $orderId, 'response' => $info]);
+            throw new CryptoCenterException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'orderId' => $orderId, 'response' => $info]);
         }
 
         $return = new cancelOrderReturn();
@@ -206,7 +206,7 @@ class Coinbene implements Exchange {
         $info = $this->api->orderInfo($orderId);
 
         if ($info->status != "ok") {
-            throw new ProjetoException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'orderId' => $orderId, 'response' => $info]);
+            throw new CryptoCenterException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'orderId' => $orderId, 'response' => $info]);
         }
 
         $status = [
@@ -251,7 +251,7 @@ class Coinbene implements Exchange {
             $return->min = $this->caches['fees'][$currency]['min'];
             $return->fee = $this->caches['fees'][$currency]['fee'];
         } else {
-            throw new ProjetoException("Coin {$currency} not avaible to trade", 300, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'currency' => $currency]);
+            throw new CryptoCenterException("Coin {$currency} not avaible to trade", 300, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'currency' => $currency]);
         }
 
         return $return;
@@ -262,7 +262,7 @@ class Coinbene implements Exchange {
         $fee = $this->getWithdrawFee($currency);
 
         if ($withdraw->status != "ok") {
-            throw new ProjetoException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'currency' => $currency, 'address' => $address, 'amount' => $amount, "comment" => $comment, 'response' => $withdraw]);
+            throw new CryptoCenterException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'currency' => $currency, 'address' => $address, 'amount' => $amount, "comment" => $comment, 'response' => $withdraw]);
         }
 
         $return = new doWithdrawReturn();

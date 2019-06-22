@@ -71,7 +71,7 @@ class Bleutrade implements Exchange {
         }
 
         if (!isset($this->caches['markets'][$pair])) {
-            throw new ProjetoException("Market {$pair} not found", 100, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'pair' => $pair]);
+            throw new CryptoCenterException("Market {$pair} not found", 100, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'pair' => $pair]);
         }
 
         $market = $this->caches['markets'][$pair];
@@ -137,7 +137,7 @@ class Bleutrade implements Exchange {
 
     public function placeOrder(String $pair, String $type, float $amount, float $price): placeOrderReturn {
         if (!in_array(strtoupper($type), ['BUY', 'SELL'])) {
-            throw new ProjetoException("Wrong order type", 102, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'pair' => $pair, 'type' => $type, 'amount' => $amount, "price" => $price]);
+            throw new CryptoCenterException("Wrong order type", 102, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'pair' => $pair, 'type' => $type, 'amount' => $amount, "price" => $price]);
         }
 
         $typeFinal = (strtoupper($type) == "BUY" ? 'buylimit' : "selllimit");
@@ -226,7 +226,7 @@ class Bleutrade implements Exchange {
         }
 
         if (!$found) {
-            throw new ProjetoException("Coin {$currency} not avaible to trade", 300, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'currency' => $currency]);
+            throw new CryptoCenterException("Coin {$currency} not avaible to trade", 300, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'currency' => $currency]);
         }
 
         return $return;
@@ -327,7 +327,7 @@ class Bleutrade implements Exchange {
         $result = json_decode($execResult);
 
         if ($result->success != "true") {
-            throw new ProjetoException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'query' => $query, 'response' => $result]);
+            throw new CryptoCenterException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'query' => $query, 'response' => $result]);
         }
 
         return $result->result;
@@ -342,7 +342,7 @@ class Bleutrade implements Exchange {
         $result = json_decode($execResult);
 
         if ($result->success != "true") {
-            throw new ProjetoException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'query' => $query, 'response' => $result]);
+            throw new CryptoCenterException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'query' => $query, 'response' => $result]);
         }
 
         return $result->result;
@@ -360,7 +360,7 @@ class Bleutrade implements Exchange {
         $result = json_decode($execResult);
 
         if ($result->success != "true") {
-            throw new ProjetoException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'query' => $query, 'response' => $result]);
+            throw new CryptoCenterException("API error", 200, null, ['exchange' => __CLASS__, 'method' => __FUNCTION__, 'query' => $query, 'response' => $result]);
         }
 
         sleep(1);

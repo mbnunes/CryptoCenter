@@ -13,10 +13,10 @@ ini_set('display_errors', '1');
  * 400 = Exchange integration error
  */
 
-require_once "projeto.class.php";
+require_once "cryptoCenter.class.php";
 
 try {
-	$tmp = new Projeto();
+	$tmp = new CryptoCenter();
 
 	// Coinbene
 	// $exchange = $tmp->getExchange("coinbene");
@@ -123,7 +123,7 @@ try {
 
 	// $withdraw = $exchange->doWithdraw("LTC", "ADDRESS", (string) $balance->avaible, "Testwithdraw");
 	// print_r($withdraw);
-} catch (ProjetoException $e) {
+} catch (CryptoCenterException $e) {
 	echo "Error: " . $e->getMessage() . "\n";
 	echo "Code: " . $e->getCode() . "\n";
 	echo "extraData: " . json_encode($e->getExtraData()) . "\n";
